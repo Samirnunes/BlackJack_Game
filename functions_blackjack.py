@@ -18,35 +18,11 @@ def get_total_chips():
         else:
             is_int = True
 
-def show_cards_and_points():
-    global player_hand, dealer_hand
-    print("\nO jogador possui as cartas:")
-    player_hand.print_hand_cards()
-    
-    print(f"A pontuação total do jogador é: {player_hand.shown_play_value()}")
-
-    print("\nO dealer possui as cartas:")
-    dealer_hand.print_hand_cards()
-
-    print(f"A pontuação total do dealer é: {dealer_hand.shown_play_value()}")
-
 def quit_game():
     global playing, total_chips
     print('\nObrigado por jogar!')
     print(f'\nSua quantidade final de fichas foi: {total_chips}')
     playing = False
-
-def player_action():
-    action_options = ['h', 's', 'q']
-    action = input('\nHit, Stand ou Quit (Sair do jogo)? Digite h, s ou q: ').lower()
-    while not (action in action_options):
-        action = input('Ação inválida. Digite novamente (h, s ou q): ').lower()
-    if action == 'h':
-        hit()
-    elif action == 's':
-        stand()
-    elif action == 'q':
-        quit_game()
 
 def get_bet():
     is_int = False
@@ -73,6 +49,39 @@ def make_bet():
             print(f'\nNão há fichas suficientes para a aposta. Você possui {total_chips} fichas. Selecione outro valor.')
             bet = get_bet()
 
+def show_cards_and_points():
+    global player_hand, dealer_hand
+    print("\nO jogador possui as cartas:")
+    player_hand.print_hand_cards()
+    
+    print(f"A pontuação total do jogador é: {player_hand.shown_play_value()}")
+
+    print("\nO dealer possui as cartas:")
+    dealer_hand.print_hand_cards()
+
+    print(f"A pontuação total do dealer é: {dealer_hand.shown_play_value()}")
+
+def player_action():
+    action_options = ['h', 's', 'q']
+    action = input('\nHit, Stand ou Quit (Sair do jogo)? Digite h, s ou q: ').lower()
+    while not (action in action_options):
+        action = input('Ação inválida. Digite novamente (h, s ou q): ').lower()
+    if action == 'h':
+        hit()
+    elif action == 's':
+        stand()
+    elif action == 'q':
+        quit_game()
+
+def reset_hands_and_deck():
+    global player_hand, dealer_hand, Deck
+
+    player_hand = player()
+    dealer_hand = dealer()
+    if len(Deck.cards) <= 4:
+        Deck = deck()
+        print("O deck foi reposto por falta de cartas.")
+
 def deal_cards():
     global playing, Deck, player_hand, dealer_hand, chip_pool, bet
 
@@ -90,15 +99,6 @@ def deal_cards():
         dealer_hand.draw(Deck.remove_card())
     
         begin_turn()
-
-def reset_hands_and_deck():
-    global player_hand, dealer_hand, Deck
-
-    player_hand = player()
-    dealer_hand = dealer()
-    if len(Deck.cards) <= 4:
-        Deck = deck()
-        print("O deck foi reposto por falta de cartas.")
 
 def begin_turn():
     if playing:
